@@ -465,7 +465,7 @@ begin
               Inc(I);
               Break;
             end;
-            KeyString := KeyString + Upcase(SendKeysString[I]);
+            KeyString := KeyString + AnsiString(Upcase(SendKeysString[I]));
           end;
           if (not FoundClose) then
           begin
@@ -481,10 +481,10 @@ begin
             Inc(I);
             Continue;
           end;
-          PosSpace := Pos(' ', KeyString);
+          PosSpace := Pos(' ', String(KeyString));
           if (PosSpace <> 0) then
           begin
-            NumTimes := StrToInt(Copy(KeyString, Succ(PosSpace), Length(KeyString) - PosSpace));
+            NumTimes := StrToInt(Copy(String(KeyString), Succ(PosSpace), Length(KeyString) - PosSpace));
             KeyString := Copy(KeyString, 1, pred(PosSpace));
           end;
           if (Length(KeyString) = 1) then

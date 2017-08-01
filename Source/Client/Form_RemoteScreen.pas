@@ -91,7 +91,7 @@ procedure Tfrm_RemoteScreen.SendSocketKeys(Keys: string);
 begin
 
   if (Active) then
-    frm_Main.Keyboard_Socket.Socket.SendText(Keys);
+    frm_Main.Keyboard_Socket.Socket.SendText(AnsiString(Keys));
 end;
 
 procedure Tfrm_RemoteScreen.CaptureKeys_TimerTimer(Sender: TObject);
@@ -393,7 +393,7 @@ end;
 procedure Tfrm_RemoteScreen.FormMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
 begin
   if (MouseRemote_CheckBox.Checked) then
-    frm_Main.Main_Socket.Socket.SendText('<|REDIRECT|><|WHEELMOUSE|>' + IntToStr(WheelDelta) + '<|END|>');
+    frm_Main.Main_Socket.Socket.SendText(AnsiString('<|REDIRECT|><|WHEELMOUSE|>' + IntToStr(WheelDelta) + '<|END|>'));
 end;
 
 procedure Tfrm_RemoteScreen.FormShow(Sender: TObject);
@@ -481,11 +481,11 @@ begin
     X := (X * frm_Main.ResolutionTargetWidth) div (Screen_Image.Width);
     Y := (Y * frm_Main.ResolutionTargetHeight) div (Screen_Image.Height);
     if (Button = mbLeft) then
-      frm_Main.Main_Socket.Socket.SendText('<|REDIRECT|><|SETMOUSELEFTCLICKDOWN|>' + IntToStr(X) + '<|>' + IntToStr(Y) + '<|END|>')
+      frm_Main.Main_Socket.Socket.SendText(AnsiString('<|REDIRECT|><|SETMOUSELEFTCLICKDOWN|>' + IntToStr(X) + '<|>' + IntToStr(Y) + '<|END|>'))
     else if (Button = mbRight) then
-      frm_Main.Main_Socket.Socket.SendText('<|REDIRECT|><|SETMOUSERIGHTCLICKDOWN|>' + IntToStr(X) + '<|>' + IntToStr(Y) + '<|END|>')
+      frm_Main.Main_Socket.Socket.SendText(AnsiString('<|REDIRECT|><|SETMOUSERIGHTCLICKDOWN|>' + IntToStr(X) + '<|>' + IntToStr(Y) + '<|END|>'))
     else
-      frm_Main.Main_Socket.Socket.SendText('<|REDIRECT|><|SETMOUSEMIDDLEDOWN|>' + IntToStr(X) + '<|>' + IntToStr(Y) + '<|END|>')
+      frm_Main.Main_Socket.Socket.SendText(AnsiString('<|REDIRECT|><|SETMOUSEMIDDLEDOWN|>' + IntToStr(X) + '<|>' + IntToStr(Y) + '<|END|>'))
   end;
 end;
 
@@ -495,7 +495,7 @@ begin
   begin
     X := (X * frm_Main.ResolutionTargetWidth) div (Screen_Image.Width);
     Y := (Y * frm_Main.ResolutionTargetHeight) div (Screen_Image.Height);
-    frm_Main.Main_Socket.Socket.SendText('<|REDIRECT|><|SETMOUSEPOS|>' + IntToStr(X) + '<|>' + IntToStr(Y) + '<|END|>');
+    frm_Main.Main_Socket.Socket.SendText(AnsiString('<|REDIRECT|><|SETMOUSEPOS|>' + IntToStr(X) + '<|>' + IntToStr(Y) + '<|END|>'));
   end;
 end;
 
@@ -506,11 +506,11 @@ begin
     X := (X * frm_Main.ResolutionTargetWidth) div (Screen_Image.Width);
     Y := (Y * frm_Main.ResolutionTargetHeight) div (Screen_Image.Height);
     if (Button = mbLeft) then
-      frm_Main.Main_Socket.Socket.SendText('<|REDIRECT|><|SETMOUSELEFTCLICKUP|>' + IntToStr(X) + '<|>' + IntToStr(Y) + '<|END|>')
+      frm_Main.Main_Socket.Socket.SendText(AnsiString('<|REDIRECT|><|SETMOUSELEFTCLICKUP|>' + IntToStr(X) + '<|>' + IntToStr(Y) + '<|END|>'))
     else if (Button = mbRight) then
-      frm_Main.Main_Socket.Socket.SendText('<|REDIRECT|><|SETMOUSERIGHTCLICKUP|>' + IntToStr(X) + '<|>' + IntToStr(Y) + '<|END|>')
+      frm_Main.Main_Socket.Socket.SendText(AnsiString('<|REDIRECT|><|SETMOUSERIGHTCLICKUP|>' + IntToStr(X) + '<|>' + IntToStr(Y) + '<|END|>'))
     else
-      frm_Main.Main_Socket.Socket.SendText('<|REDIRECT|><|SETMOUSEMIDDLEUP|>' + IntToStr(X) + '<|>' + IntToStr(Y) + '<|END|>')
+      frm_Main.Main_Socket.Socket.SendText(AnsiString('<|REDIRECT|><|SETMOUSEMIDDLEUP|>' + IntToStr(X) + '<|>' + IntToStr(Y) + '<|END|>'))
   end;
 end;
 

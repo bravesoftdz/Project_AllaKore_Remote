@@ -333,10 +333,6 @@ var
   BufferTemp    : string;
   ID            : string;
   position      : Integer;
-  ThreadMain    : TThreadConnection_Main;
-  ThreadDesktop : TThreadConnection_Desktop;
-  ThreadKeyboard: TThreadConnection_Keyboard;
-  ThreadFiles   : TThreadConnection_Files;
 begin
   inherited;
 
@@ -349,13 +345,13 @@ begin
       if AThread_Define.ReceiveLength < 1 then
         Continue;
 
-      Buffer := AThread_Define.ReceiveText;
+      Buffer := String(AThread_Define.ReceiveText);
 
       position := Pos('<|MAINSOCKET|>', Buffer); // Storing the position in an integer variable will prevent it from having to perform two searches, gaining more performance
       if position > 0 then
       begin
         // Create the Thread for Main Socket
-        ThreadMain := TThreadConnection_Main.Create(AThread_Define);
+        TThreadConnection_Main.Create(AThread_Define);
 
         break; // Break the while
       end;
@@ -369,7 +365,7 @@ begin
         ID := Copy(BufferTemp, 1, Pos('<|END|>', BufferTemp) - 1);
 
         // Create the Thread for Desktop Socket
-        ThreadDesktop := TThreadConnection_Desktop.Create(AThread_Define, ID);
+        TThreadConnection_Desktop.Create(AThread_Define, ID);
 
         break; // Break the while
       end;
@@ -383,7 +379,7 @@ begin
         ID := Copy(BufferTemp, 1, Pos('<|END|>', BufferTemp) - 1);
 
         // Create the Thread for Keyboard Socket
-        ThreadKeyboard := TThreadConnection_Keyboard.Create(AThread_Define, ID);
+        TThreadConnection_Keyboard.Create(AThread_Define, ID);
 
         break; // Break the while
       end;
@@ -397,7 +393,7 @@ begin
         ID := Copy(BufferTemp, 1, Pos('<|END|>', BufferTemp) - 1);
 
         // Create the Thread for Files Socket
-        ThreadFiles := TThreadConnection_Files.Create(AThread_Define, ID);
+        TThreadConnection_Files.Create(AThread_Define, ID);
 
         break; // Break the while
       end;
@@ -444,7 +440,7 @@ begin
   L                     := frm_Main.Connections_ListView.FindCaption(0, IntToStr(AThread_Main.Handle), False, true, False);
   L.SubItems.Objects[0] := TObject(Self);
 
-  while AThread_Main.SendText('<|ID|>' + ID + '<|>' + Password + '<|END|>') < 0 do
+  while AThread_Main.SendText(AnsiString('<|ID|>' + ID + '<|>' + Password + '<|END|>')) < 0 do
     Sleep(ProcessingSlack);
 
   try
@@ -459,7 +455,7 @@ begin
       if AThread_Main.ReceiveLength < 1 then
         Continue;
 
-      Buffer := AThread_Main.ReceiveText;
+      Buffer := String(AThread_Main.ReceiveText);
 
       position := Pos('<|FINDID|>', Buffer);
       if position > 0 then
@@ -605,7 +601,7 @@ begin
             if (Pos('<|ENDFOLDERLIST|>', BufferTemp) > 0) then
               break;
 
-            BufferTemp := BufferTemp + AThread_Main.ReceiveText;
+            BufferTemp := BufferTemp + String(AThread_Main.ReceiveText);
 
           end;
         end;
@@ -621,13 +617,13 @@ begin
             if (Pos('<|ENDFILESLIST|>', BufferTemp) > 0) then
               break;
 
-            BufferTemp := BufferTemp + AThread_Main.ReceiveText;
+            BufferTemp := BufferTemp + String(AThread_Main.ReceiveText);
 
           end;
         end;
 
         if (AThread_Main_Target <> nil) and (AThread_Main_Target.Connected) then
-          while AThread_Main_Target.SendText(BufferTemp) < 0 do
+          while AThread_Main_Target.SendText(AnsiString(BufferTemp)) < 0 do
             Sleep(ProcessingSlack);
 
       end;
@@ -694,7 +690,7 @@ end;
 // The connection type is the Desktop Screens
 procedure TThreadConnection_Desktop.Execute;
 var
-  Buffer: string;
+  Buffer: AnsiString;
   L     : TListItem;
 begin
   inherited;
@@ -760,10 +756,10 @@ begin
       if AThread_Keyboard.ReceiveLength < 1 then
         Continue;
 
-      Buffer := AThread_Keyboard.ReceiveText;
+      Buffer := String(AThread_Keyboard.ReceiveText);
 
       if (AThread_Keyboard_Target <> nil) and (AThread_Keyboard_Target.Connected) then
-        while AThread_Keyboard_Target.SendText(Buffer) < 0 do
+        while AThread_Keyboard_Target.SendText(AnsiString(Buffer)) < 0 do
           Sleep(ProcessingSlack);
 
     end;
@@ -788,7 +784,7 @@ end;
 // The connection type is to Share Files
 procedure TThreadConnection_Files.Execute;
 var
-  Buffer: string;
+  Buffer: AnsiString;
   L     : TListItem;
 begin
   inherited;
@@ -851,7 +847,7 @@ begin
         Connection.StartPing := GetTickCount;
 
         if Connections_ListView.Items.Item[i].SubItems[4] <> 'Calculating...' then
-          Connection.AThread_Main.SendText('<|SETPING|>' + IntToStr(Connection.EndPing) + '<|END|>');
+          Connection.AThread_Main.SendText(AnsiString('<|SETPING|>' + IntToStr(Connection.EndPing) + '<|END|>'));
       end;
 
       Inc(i);
